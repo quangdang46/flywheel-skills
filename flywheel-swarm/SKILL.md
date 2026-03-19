@@ -7,7 +7,7 @@ description: >
   coordination via Agent Mail and bv, handle stuck agents or compaction, run review
   and hardening rounds, or tend an active swarm. Trigger on phrases like "launch agents",
   "start the swarm", "agent coordination", "agent mail", "multiple agents", "parallel
-  agents", "ntm spawn", "marching orders", "swarm is stuck", "review round", "cross-agent
+  agents", "marching orders", "swarm is stuck", "review round", "cross-agent
   review", "harden the code", or any mention of running multiple coding agents simultaneously.
 ---
 
@@ -41,19 +41,11 @@ Three tools — remove any one and the swarm loses determinism:
 - [ ] Agent Mail project is initialized
 - [ ] bv is installed and responsive
 - [ ] DCG (Destructive Command Guard) is active
-- [ ] CAAM configured for account switching
 
 ---
 
 ## Step 2: Launch the Swarm
 
-### NTM (Named Tmux Manager)
-```bash
-ntm spawn myproject --cc=2 --cod=1 --gmi=1    # 2 Claude + 1 Codex + 1 Gemini
-ntm send myproject "YOUR MARCHING ORDERS"      # Send to ALL agents
-ntm send myproject --cc "Focus on API layer"   # Send to specific type
-ntm palette                                    # Open battle-tested prompt library
-```
 
 ### Staggered Start (critical — prevents thundering herd)
 Start agents **30+ seconds apart**. Simultaneous starts cause agents to pile onto the
@@ -169,9 +161,8 @@ Each agent follows this sequence for every bead:
 1. **Check progress:** `br list --status in_progress --json` or `bv --robot-triage`
 2. **Handle compactions:** Send "Reread AGENTS.md so it's still fresh in your mind."
 3. **Periodic reviews:** Pick 1–2 agents that finished a bead, send cross-agent review prompt
-4. **Rate limits:** `caam activate claude backup-2` or start new agent
-5. **Organized commits:** Every 1–2h, designate one agent for commits
-6. **New issues:** Create beads for unanticipated problems, don't improvise in-session
+4. **Organized commits:** Every 1–2h, designate one agent for commits
+5. **New issues:** Create beads for unanticipated problems, don't improvise in-session
 
 **Post-Compaction Reset (most common intervention):**
 ```
@@ -291,22 +282,13 @@ Agent Mail threads — without the human re-explaining the project from scratch.
 
 ---
 
-## Account Switching (Rate Limits)
-
-```bash
-caam status                     # See current accounts + usage
-caam activate claude backup-2   # Switch instantly (<100ms)
-```
-
----
-
 ## Agent Fungibility (Key Design Principle)
 
 All agents are generalists. No specialist roles. No "ringleader" coordinator agent.
 When any agent crashes:
 1. The bead remains marked `in_progress`
 2. Any other agent can resume it
-3. Replace the dead agent with `ntm add PROJECT --cc=1` + marching orders prompt
+3. Replace the dead agent with a fresh agent + marching orders prompt
 4. No downtime, no data loss, minimal slowdown
 
 Coordination lives in **artifacts** (beads, reservations, threads) and **tools** (bv, Agent Mail),
