@@ -23,7 +23,7 @@ description: >
 └── install.sh        ← production-grade curl-pipe installer
 ```
 
-Workspace variant: same structure, `release.yml` routes by tag prefix.
+Workspace variant: same structure.
 
 ---
 
@@ -72,7 +72,7 @@ jobs:
 
 ## release.yml
 
-Trigger: `vX.Y.Z` tag (single binary) or `<crate>-vX.Y.Z` / `release-all-vX.Y.Z` (workspace).
+Trigger: `vX.Y.Z` tag.
 
 Build matrix (5 targets):
 
