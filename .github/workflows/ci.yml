@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+jobs:
+  validate-skills:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate skill layout
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          mapfile -t skill_dirs < <(
+            find . -mindepth 1 -maxdepth 1 -type d \
+              ! -name .git \
+              ! -name .github \
+              ! -name backup \
+              | sort
+          )
+
+          [ "${#skill_dirs[@]}" -gt 0 ] || {
+            echo "No skill directories found"
+            exit 1
+          }
+
+          missing=0
+          for dir in "${skill_dirs[@]}"; do
+            if [ ! -f "$dir/SKILL.md" ]; then
+              echo "Missing SKILL.md in $dir"
+              missing=1
+            fi
+          done
+
+          [ "$missing" -eq 0 ]
+
+      - name: Verify markdown files are non-empty
+        shell: bash
+        run: |
+          set -euo pipefail
+          while IFS= read -r file; do
+            [ -s "$file" ] || {
+              echo "Empty markdown file: $file"
+              exit 1
+            }
+          done < <(find . -name '*.md' -type f | sort)
